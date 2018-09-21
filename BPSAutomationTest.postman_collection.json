@@ -1,0 +1,90 @@
+{
+	"info": {
+		"_postman_id": "aa23b8af-4d4c-4c22-9704-b116b760afe2",
+		"name": "BPSAutomationTest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetPayeeTest",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"response is ok\", function() {",
+							"    pm.response.to.have.status(200)",
+							"});",
+							"",
+							"pm.test(\"response does not have error\" , function() {",
+							"    pm.response.to.not.have.jsonBody('error')",
+							"});",
+							"",
+							"",
+							"",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"DI0018\",intuit-urid=\"c5081cd552c0451c86cc8efb04287549\" intuit-fiscid=\"186123456\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98"
+					},
+					{
+						"key": "intuit_tid",
+						"value": "30f8aa63-1ac1-4dc6-8e86-e2c2af89ed39"
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {},
+				"url": {
+					"raw": "http://bps.qal1.diginsite.net//payment/v1/realm/0/profile",
+					"protocol": "http",
+					"host": [
+						"bps",
+						"qal1",
+						"diginsite",
+						"net"
+					],
+					"path": [
+						"",
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		}
+	]
+}
