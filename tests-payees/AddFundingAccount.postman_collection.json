@@ -1,12 +1,12 @@
 {
 	"info": {
 		"_postman_id": "1069e310-83de-48e4-a3c8-012b13cfdd91",
-		"name": "BPS_GET_PAYEE_P",
+		"name": "BPS_GET_FUNDING_ACCOUNTS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "GetPayeeTest",
+			"name": "GetFunding_accounts",
 			"event": [
 				{
 				"listen": "test",
