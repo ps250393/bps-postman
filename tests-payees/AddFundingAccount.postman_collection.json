@@ -1,0 +1,104 @@
+{
+	"info": {
+		"_postman_id": "1069e310-83de-48e4-a3c8-012b13cfdd91",
+		"name": "BPS_GET_PAYEE_P",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GetPayeeTest",
+			"event": [
+				{
+				"listen": "test",
+					"script": {
+						"id": "92e0e2af-3b7f-4807-9172-027edf12622b",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response headers",
+							"expectResponseToHaveHeader(\"transactionId\", pm.environment.get(\"institution-users-uuid\"));",
+							"expectResponseToHaveHeader(\"content-type\", /application\\/xml/);",
+							"",
+							"//Validate response body",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.institutionUserId\", \"7ba01d8d8f2541b091927e87e191fb09\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.institutionId\", \"02037\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.institutionUserRole\", \"BUSINESS_ADMIN\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.institutionUserType\", \"BUSINESS\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.institutionCustomers.institutionCustomerId\", \"56a276a5f11f470e8c6f041456110753\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.institutionCustomers.memberNumber\", \"248565752\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.userId\", \"84fb084e63d34a4fbe09ff9065b96cbc\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.additionalInfo.entry.0.key\", \"companyId\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.additionalInfo.entry.0.value\", \"240dc622ff4d45eaa9640b8002bba46d\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.additionalInfo.entry.1.key\", \"legacyUserGuid\");",
+							"expectResponseBodyToHaveJsonProperty(\"InstitutionUser.additionalInfo.entry.1.value\", \"3ec80164a8b54da2bdf64af82a014699\");",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();"
+						],
+						"type": "text/javascript"
+
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"DI0018\",intuit-urid=\"c5081cd552c0451c86cc8efb04287549\" intuit-fiscid=\"186123456\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98"
+					},
+					{
+						"key": "intuit_tid",
+						"value": "30f8aa63-1ac1-4dc6-8e86-e2c2af89ed39"
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/profile",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		}
+	]
+}
