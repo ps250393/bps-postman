@@ -2187,13 +2187,9 @@
 					"raw": "<Category xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n<name>sampleaddcategory</name>\n</Category>"
 				},
 				"url": {
-					"raw": "http://bps.qal1.diginsite.net/payment/v1/realm/0/category",
-					"protocol": "http",
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/category",
 					"host": [
-						"bps",
-						"qal1",
-						"diginsite",
-						"net"
+						"{{bps-baseurl}}"
 					],
 					"path": [
 						"payment",
@@ -2422,13 +2418,9 @@
 					"raw": "<Category xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <id idDomain=\"IPE\">{{Categoryid}}</id>\n        <revision>1</revision>\n        <name>sampleaddcategory update</name>\n</Category>\n"
 				},
 				"url": {
-					"raw": "http://bps.qal1.diginsite.net/payment/v1/realm/0/category",
-					"protocol": "http",
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/category",
 					"host": [
-						"bps",
-						"qal1",
-						"diginsite",
-						"net"
+						"{{bps-baseurl}}"
 					],
 					"path": [
 						"payment",
@@ -2534,13 +2526,9 @@
 					"raw": ""
 				},
 				"url": {
-					"raw": "http://bps.qal1.diginsite.net/payment/v1/realm/0/category/{{Categoryid}}",
-					"protocol": "http",
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/category/{{Categoryid}}",
 					"host": [
-						"bps",
-						"qal1",
-						"diginsite",
-						"net"
+						"{{bps-baseurl}}"
 					],
 					"path": [
 						"payment",
@@ -2551,6 +2539,225 @@
 						"{{Categoryid}}"
 					]
 				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Bills",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.Bills.Bill.length] = true;",
+							"tests[\"Got Bills successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify Bills\"] = pm.expect(pm.response.text()).to.include('Bills');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"//expectResponseBodyToHaveJsonProperty(\"Success.Categories.Category.name[0]\", \"Personal Care\");",
+							"",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{BILLSGUID}}\" intuit-fiscid=\"{{BILLSLOGIN}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					},
+					{
+						"key": "intuit_tid",
+						"value": "tcmspringboottesting1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/bill",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"bill"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		},
+		{
+			"name": "Get single bill",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Bill.id._\", \"280968\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Bill.payeeId._\", \"43864\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Bill.payeeName\", \"TEST BILLER 3\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Bill.dueAmount.currencyCode\", \"USD\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Bill.dueAmount.amount\", \"600\");",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{BILLSGUID}}\" intuit-fiscid=\"{{BILLSLOGIN}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					},
+					{
+						"key": "intuit_tid",
+						"type": "text",
+						"value": "tcmspringboottesting1"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/bill/{{billid}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"bill",
+						"{{billid}}"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
 			},
 			"response": []
 		}
