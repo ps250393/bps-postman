@@ -1,0 +1,111 @@
+{
+	"info": {
+		"_postman_id": "a6efe075-49ae-4739-9a7c-5c75edd47b09",
+		"name": "BPS-Profile",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Got Profile successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify Profile\"] = pm.expect(pm.response.text()).to.include('Profile');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.billingClass\", \"505\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.status\", \"ACTIVE\");",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/profile",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		}
+	]
+}
