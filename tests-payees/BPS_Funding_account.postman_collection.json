@@ -1,0 +1,562 @@
+{
+	"info": {
+		"_postman_id": "b329eb21-8c8a-4a1f-afdf-f69e9bbdd0ce",
+		"name": "BPS_Funding_account",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add Funding Account",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "0675bed4-3163-4195-b9d1-cc446eb05070",
+						"exec": [
+							"pm.environment.set(\"FundingAccount\", \"Test Checking\");",
+							"pm.environment.set(\"FundingActnum\", \"54654356546546\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "416c81eb-a359-4064-bfc4-b1a88882ecef",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Added Funding account successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.name\",pm.environment.get(\"FundingAccount\") );",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.routingNumber\", \"323075754\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.status\", \"APPROVED\");",
+							"var FundingAccountid = convertedData.Success.Account.id._;",
+							"console.log(FundingAccountid)",
+							"",
+							"// Assigning the extracted value in to a global variable",
+							"pm.environment.set(\"FundingAccountid\", FundingAccountid);",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					},
+					{
+						"key": "bbs_realm_id",
+						"value": "{{realmid}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Account xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n<name>{{FundingAccount}}</name>\n<nickname>{{FundingAccount}}</nickname>\n<bankName>The Pacific Northwest</bankName>\n<default>false</default>\n<accountNumber>{{FundingActnum}}</accountNumber>\n<routingNumber>323075754</routingNumber>\n<bankAccountType>CHECKING</bankAccountType>\n<validate>false</validate>\n</Account>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/account/",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get one Funding Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Got Account successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"Verify Payee\"] = pm.expect(pm.response.text()).to.include('Account');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.name\", \"Test Checking\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.status\", \"APPROVED\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankAccountType\", \"CHECKING\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.id._\", pm.environment.get(\"FundingAccountid\"));",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/account/{{FundingAccountid}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"account",
+						"{{FundingAccountid}}"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Funding Accounts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.Accounts.Account.length] = true;",
+							"tests[\"Got Accounts successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"Verify Accounts\"] = pm.expect(pm.response.text()).to.include('Accounts');",
+							"tests[\"Verify Payee\"] = pm.expect(pm.response.text()).to.include('Account');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"//expectResponseBodyToHaveJsonProperty(\"Success.Accounts.Account.name\", \"Test Checking\");",
+							"//expectResponseBodyToHaveJsonProperty(\"Success.Accounts.status\", \"APPROVED\");",
+							"//expectResponseBodyToHaveJsonProperty(\"Success.Accounts.bankAccountType\", \"CHECKING\");",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/account",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"account"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		},
+		{
+			"name": "Modify Funding Account",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b6de438e-99bd-4d1a-8f11-46c64342b728",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "d51efd90-0dd7-44a9-beb3-81165ef9166f",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Modified Funding account successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.name\",pm.environment.get(\"FundingAccount\") );",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.routingNumber\", \"323075754\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.status\", \"APPROVED\");",
+							"",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					},
+					{
+						"key": "bbs_realm_id",
+						"value": "{{realmid}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Account xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <id idDomain=\"IPE\">{{FundingAccountid}}</id>\n        <revision>2</revision>\n        <name>{{FundingAccount}}</name>\n        <nickname>{{FundingAccount}} Update</nickname>\n        <status>APPROVED</status>\n        <default>false</default>\n        <accountNumber>****6546</accountNumber>\n        <routingNumber>323075754</routingNumber>\n        <bankName>The Pacific Northwest</bankName>\n        <bankAccountType>CHECKING</bankAccountType>\n        <validate>false</validate>\n        <skipAccountValidation>true</skipAccountValidation>\n</Account>\n"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/account/",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"account",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete- Funding Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Account Deleted successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.name\", pm.environment.get(\"FundingAccount\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.status\", \"INACTIVE_OR_DELETED\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.routingNumber\", \"323075754\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankAccountType\", \"CHECKING\");",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/account/{{FundingAccountid}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"account",
+						"{{FundingAccountid}}"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		}
+	]
+}
