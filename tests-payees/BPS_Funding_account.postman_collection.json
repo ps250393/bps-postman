@@ -438,7 +438,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "<Account xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <id idDomain=\"IPE\">{{FundingAccountid}}</id>\n        <revision>2</revision>\n        <name>{{FundingAccount}}</name>\n        <nickname>{{FundingAccount}} Update</nickname>\n        <status>APPROVED</status>\n        <default>false</default>\n        <accountNumber>****6546</accountNumber>\n        <routingNumber>323075754</routingNumber>\n        <bankName>The Pacific Northwest</bankName>\n        <bankAccountType>CHECKING</bankAccountType>\n        <validate>false</validate>\n        <skipAccountValidation>true</skipAccountValidation>\n</Account>\n"
+					"raw": "<Account xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <id idDomain=\"IPE\">{{FundingAccountid}}</id>\n        <revision>1</revision>\n        <name>{{FundingAccount}}</name>\n        <nickname>{{FundingAccount}}Update</nickname>\n        <status>APPROVED</status>\n        <default>false</default>\n        <accountNumber>****6546</accountNumber>\n        <routingNumber>323075754</routingNumber>\n        <bankName>The Pacific Northwest</bankName>\n        <bankAccountType>CHECKING</bankAccountType>\n        <validate>false</validate>\n        <skipAccountValidation>true</skipAccountValidation>\n</Account>\n"
 				},
 				"url": {
 					"raw": "{{bps-baseurl}}/payment/v1/realm/0/account/",
