@@ -45,6 +45,7 @@
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.status\", \"APPROVED\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.revision\", \"1\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.routingNumber\",\"323075754\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.accountNumber\",\"****6546\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankName\",\"The Pacific Northwest\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankAccountType\",\"CHECKING\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.validate\",\"false\");",
