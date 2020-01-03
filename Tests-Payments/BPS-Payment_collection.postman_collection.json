@@ -265,7 +265,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "<Payment xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <date>{{PaymentDate}}</date>\n        <amount>\n            <currencyCode>USD</currencyCode>\n            <amount>10.00</amount>\n        </amount>\n        <accountId idDomain=\"IPE\">43234</accountId>\n        <accountName>Personal Checking</accountName>\n        <accountNickname>Personal Checking</accountNickname>\n        <status>SCHEDULED</status>\n        <expectedDeliveryDate>2020-01-28</expectedDeliveryDate>\n        <payeeId idDomain=\"IPE\">{{Payeeid}}</payeeId>\n        <payeeName>{{ManagedPayee}}</payeeName>\n        <payeeNickname>{{ManagedPayee}}</payeeNickname>\n        <payeeAccountNumber>{{Accountnum}}</payeeAccountNumber>\n        <deliveryMethod>TRUST_CHECK</deliveryMethod>\n        <categoryId idDomain=\"IPE\">103733</categoryId>\n        <categoryName>uncategorized</categoryName>\n        <autoPayment>true</autoPayment>\n        <address>\n            <address1>20 Payee road</address1>\n            <city>Norcroos</city>\n            <state>GA</state>\n            <country>US</country>\n            <postalCode>30091</postalCode>\n        </address>\n        <paymentRuleId idDomain=\"IPE\">20253</paymentRuleId>\n    </Payment>"
+					"raw": "<Payment xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <date>{{PaymentDate}}</date>\n        <amount>\n            <currencyCode>USD</currencyCode>\n            <amount>10.00</amount>\n        </amount>\n        <accountId idDomain=\"IPE\">43234</accountId>\n        <accountName>Personal Checking</accountName>\n        <accountNickname>Personal Checking</accountNickname>\n        <status>SCHEDULED</status>\n        <expectedDeliveryDate>2020-01-28</expectedDeliveryDate>\n        <payeeId idDomain=\"IPE\">{{UnmanagedPayeeid}}</payeeId>\n        <payeeName>{{UnManagedPayee}}</payeeName>\n        <payeeNickname>{{UnManagedPayee}}</payeeNickname>\n        <payeeAccountNumber>12345678910</payeeAccountNumber>\n        <deliveryMethod>TRUST_CHECK</deliveryMethod>\n        <categoryId idDomain=\"IPE\">103733</categoryId>\n        <categoryName>uncategorized</categoryName>\n        <autoPayment>true</autoPayment>\n        <address>\n            <address1>20 Payee road</address1>\n            <city>Norcroos</city>\n            <state>GA</state>\n            <country>US</country>\n            <postalCode>30091</postalCode>\n        </address>\n        <paymentRuleId idDomain=\"IPE\">20253</paymentRuleId>\n    </Payment>"
 				},
 				"url": {
 					"raw": "{{bps-baseurl}}/payment/v1/realm/0/payment/",
@@ -679,6 +679,127 @@
 						"0",
 						"payment",
 						"{{Paymentid}}"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete- Unmanaged Payee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.Payee.length] = true;",
+							"tests[\"Payee Deleted successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.name\", pm.environment.get(\"UnManagedPayee\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.status\", \"DELETED\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.id._\", pm.environment.get(\"UnmanagedPayeeid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.revision\", \"2\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.metData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.metData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.nickname\", pm.environment.get(\"UnManagedPayee\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.accountNumber\", \"****8910\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.address1\", \"20 Payee road\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.city\", \"Norcroos\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.state\", \"GA\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.postalCode\", \"30091\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.phoneNumber.number\", \"8689558833\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.emailAddress\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.categoryId._\", \"103717\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.categoryName\", \"Uncategorized\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.merchantId._\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.cutoffTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.leadDays\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.payeeType\", \"UNMANAGED\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.eBillStatus\", \"NOT_AVAILABLE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.lastPaidAmount\");",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/payee/{{UnmanagedPayeeid}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"payee",
+						"{{UnmanagedPayeeid}}"
 					]
 				},
 				"description": "This test is to get Payee details from BPS"
