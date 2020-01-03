@@ -140,114 +140,6 @@
 			"response": []
 		},
 		{
-			"name": "Get one Funding Account",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
-						"exec": [
-							"//Load pxlib",
-							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
-							"",
-							"//Start testing using pxlib",
-							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
-							"",
-							"//Validate response status code",
-							"expectResponseStatusCodeToBe(200);",
-							"",
-							"//Validate response body",
-							"",
-							"let convertedData = xml2Json(pm.response.text());",
-							"tests[\"Got Account successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
-							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
-							"tests[\"Verify Payee\"] = pm.expect(pm.response.text()).to.include('Account');",
-							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.name\", pm.environment.get(\"FundingAccount\"));",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.nickname\", pm.environment.get(\"FundingAccount\"));",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.status\", \"APPROVED\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankAccountType\", \"CHECKING\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.id._\", pm.environment.get(\"FundingAccountid\"));",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.createdTime\" ,pm.environment.get(\"createdTime\"));",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.lastUpdatedTime\" ,pm.environment.get(\"createdTime\"));",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.revision\", \"1\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.default\", \"false\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.accountNumber\", \"****6546\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankName\",\"The Pacific Northwest\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.validate\",\"false\");",
-							"",
-							"",
-							"//End testing using pxlib",
-							"endPXTest();",
-							"",
-							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
-							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
-							"",
-							"",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/xml"
-					},
-					{
-						"key": "Authorization",
-						"type": "text",
-						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
-					},
-					{
-						"key": "intuit_payment_app_token",
-						"type": "text",
-						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
-						"disabled": true
-					},
-					{
-						"key": "intuit_payment_userType",
-						"type": "text",
-						"value": "PRIMARY"
-					},
-					{
-						"key": "intuit_loginId",
-						"type": "text",
-						"value": ""
-					},
-					{
-						"key": "Accept-Encoding",
-						"type": "text",
-						"value": "identity;q=1, *;q=0"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"url": {
-					"raw": "{{bps-baseurl}}/payment/v1/realm/0/account/{{FundingAccountid}}",
-					"host": [
-						"{{bps-baseurl}}"
-					],
-					"path": [
-						"payment",
-						"v1",
-						"realm",
-						"0",
-						"account",
-						"{{FundingAccountid}}"
-					]
-				},
-				"description": "This test is to get Payee details from BPS"
-			},
-			"response": []
-		},
-		{
 			"name": "Get Funding Accounts",
 			"event": [
 				{
@@ -410,6 +302,114 @@
 			"response": []
 		},
 		{
+			"name": "Get one Funding Account",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Got Account successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"Verify Payee\"] = pm.expect(pm.response.text()).to.include('Account');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.name\", pm.environment.get(\"FundingAccount\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.nickname\", pm.environment.get(\"FundingAccount\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.status\", \"APPROVED\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankAccountType\", \"CHECKING\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.id._\", pm.environment.get(\"FundingAccountid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.createdTime\" ,pm.environment.get(\"createdTime\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.lastUpdatedTime\" ,pm.environment.get(\"createdTime\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.revision\", \"1\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.default\", \"false\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.accountNumber\", \"****6546\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankName\",\"The Pacific Northwest\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.validate\",\"false\");",
+							"",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/account/{{FundingAccountid}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"account",
+						"{{FundingAccountid}}"
+					]
+				},
+				"description": "This test is to get Payee details from BPS"
+			},
+			"response": []
+		},
+		{
 			"name": "Modify Funding Account",
 			"event": [
 				{
@@ -448,7 +448,7 @@
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.nickname\", \"Test CheckingUpdate\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankAccountType\", \"CHECKING\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.id._\", pm.environment.get(\"FundingAccountid\"));",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.createdTime\" ,((createdTime)));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.createdTime\" ,pm.environment.get(\"createdTime\"));",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.lastUpdatedTime\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.revision\", \"2\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.default\", \"false\");",
@@ -555,15 +555,15 @@
 							"tests[\"Account Deleted successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.name\", pm.environment.get(\"FundingAccount\"));",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.status\", \"INACTIVE_OR_DELETED\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.accountNumber\", \"****6546\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.routingNumber\", \"323075754\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankAccountType\", \"CHECKING\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.nickname\", \"Test CheckingUpdate\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.id._\", pm.environment.get(\"FundingAccountid\"));",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.createdTime\" ,pm.environment.get(\"createdTime\"));",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.metaData.lastUpdatedTime\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.revision\", \"2\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Account.revision\", \"3\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.default\", \"false\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Account.accountNumber\",pm.environment.get(\"FundingActnum\"));",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.bankName\",\"The Pacific Northwest\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Account.validate\",\"false\");",
 							"",
