@@ -138,6 +138,145 @@
 			"response": []
 		},
 		{
+			"name": "Add UnManaged Payee -- FISERV",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "93f6dca4-20fd-43e7-85c0-049241a88862",
+						"exec": [
+							"pm.environment.set(\"UnManagedPayee\", \"TestPayee\");",
+							"pm.environment.set(\"Accountnum\", \"12345678910\");",
+							"pm.environment.set(\"phonenum\", \"8689558833\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "483ac3b9-5bca-4bbf-b5ab-8d1a687a19c9",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"let convertedData = xml2Json(pm.response.text());",
+							"var unmanagedPayeeid = convertedData.Success.Payee.id._;",
+							"console.log(unmanagedPayeeid)",
+							"",
+							"// Assigning the extracted value in to a global variable",
+							"pm.environment.set(\"UnmanagedPayeeid\", unmanagedPayeeid);",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.name\", \"TestPayee\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.status\", \"ACTIVE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.payeeType\", \"UNMANAGED\");",
+							"tests[\"Got Payees successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"Verify Payee\"] = pm.expect(pm.response.text()).to.include('Payee');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.id._\", ((Payeeid)));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.revision\", \"1\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.nickname\",  pm.environment.get(\"UnManagedPayee\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.accountNumber\", \"****8910\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.address1\", \"20 Payee road\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.city\", \"Norcroos\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.state\", \"GA\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.postalCode\", \"30091\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.phoneNumber.number\", \"8689558833\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.emailAddress\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.categoryId._\", \"103717\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.categoryName\", \"Uncategorized\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.merchantId\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.cutoffTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.leadDays\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.eBillStatus\", \"NOT_AVAILABLE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.lastPaidAmount\");",
+							"",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"}); ",
+							"",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Payee xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n<name>{{UnManagedPayee}}</name>\n<nickname>{{UnManagedPayee}}</nickname>\n<accountNumber>{{Accountnum}}</accountNumber>\n<address>\n<address1>20 Payee road</address1>\n<city>Norcroos</city>\n<state>GA</state>\n<country>US</country>\n<postalCode>30091</postalCode>\n</address>\n<phoneNumber>\n<number>{{phonenum}}</number>\n</phoneNumber>\n<emailAddress/>\n<categoryId idDomain=\"IPE\">103717</categoryId>\n<categoryName>uncategorized</categoryName>\n<merchantId idDomain=\"IPE\"/>\n<status>ACTIVE</status>\n<cutoffTime>15:00:00.000-07:00</cutoffTime>\n<leadDays>4</leadDays>\n<payeeType>UNMANAGED</payeeType>\n</Payee>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/payee",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"payee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Post Single Payment",
 			"event": [
 				{
@@ -216,6 +355,16 @@
 							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
 							"",
 							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "ab00a8c9-98f9-4a3b-b335-93d92d77bea9",
+						"exec": [
 							""
 						],
 						"type": "text/javascript"
