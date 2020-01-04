@@ -340,7 +340,7 @@
 							"expectResponseBodyToHaveJsonProperty(\"Success.Payment.address.state\", \"GA\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Payment.address.country\", \"US\");",
 							"expectResponseBodyToHaveJsonProperty(\"Success.Payment.address.postalCode\", \"30091\");",
-							"expectResponseBodyToHaveJsonProperty(\"Success.Payment.paymentRuleId\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payment.paymentRuleId._\");",
 							"",
 							"",
 							"//pm.test(\"Check Payee Name\", function () {",
