@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "a89e473e-2ee8-45f8-a49a-6cb04a5f47a8",
+		"name": "BPS-FinanceInstitution",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Finance Institution",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.id._\", \"4000\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.name\", \"IQA0018\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.dailyLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.transactionLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.paymentModel\", \"DUE_DATE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.cutoffTime\", \"11:00:00.000-08:00\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.phoneNumber.number\", \"650-944-7896\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.allowAddingAccount\", \"true\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.FinanceInstitutions.FinanceInstitution.billpayProvider\", \"1\");",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					},
+					{
+						"key": "intuit_tid",
+						"value": "tcmspringboottesting1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/financeinstitution",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"financeinstitution"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
