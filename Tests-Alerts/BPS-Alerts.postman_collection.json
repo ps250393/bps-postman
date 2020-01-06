@@ -1,0 +1,339 @@
+{
+	"info": {
+		"_postman_id": "418bd989-6f8d-460a-9bea-4c67b2daee3b",
+		"name": "BPS-Alerts",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Alerts",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.AlertPreferences.AlertPreference.length] = true;",
+							"tests[\"Got Alerts successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"Verify Alerts\"] = pm.expect(pm.response.text()).to.include('AlertPreferences');",
+							"tests[\"Verify Alertpref\"] = pm.expect(pm.response.text()).to.include('AlertPreference');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"expectResponseBodyToHaveJsonUnorderedArray(\"Success.AlertPreferences.AlertPreference\", [",
+							"        {pathToProperty: \"id._\", expectedValue: pm.environment.get(\"Alertid\")},",
+							"        {pathToProperty: \"revision\"},",
+							"        {pathToProperty: \"metaData.createdTime\", expectedValue: \"2016-09-20T07:37:15.804-07:00\"},",
+							"        {pathToProperty: \"metaData.lastUpdatedTime\"},",
+							"        {pathToProperty: \"name\", expectedValue: \"Payment Due\"},",
+							"        {pathToProperty: \"description\", expectedValue: \"Notification - Your {payee nickname} e-bill payment is due\"},",
+							"        {pathToProperty: \"status\", expectedValue: \"ON\"},",
+							"        {pathToProperty: \"category\", expectedValue: \"EBILL\"}",
+							"        ]);",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{AlertFIID}}\",intuit-urid=\"{{AlertuserGUID}}\" intuit-fiscid=\"{{Alertprovider}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/alertpreference",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"alertpreference"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get single Alert",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.AlertPreference.length] = true;",
+							"tests[\"Got Alert successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"Verify Alertpref\"] = pm.expect(pm.response.text()).to.include('AlertPreference');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"        ",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreference.id._\", pm.environment.get(\"Alertid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreference.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreference.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreference.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreference.name\", \"Payment Due\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreference.description\", \"Notification - Your {payee nickname} e-bill payment is due\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreference.status\", \"ON\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreference.category\", \"EBILL\");",
+							"        ",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{AlertFIID}}\",intuit-urid=\"{{AlertuserGUID}}\" intuit-fiscid=\"{{Alertprovider}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/alertpreference/{{Alertid}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"alertpreference",
+						"{{Alertid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Alert",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.AlertPreferences.AlertPreference.length] = true;",
+							"tests[\"Got Alerts successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"Verify Alerts\"] = pm.expect(pm.response.text()).to.include('AlertPreferences');",
+							"tests[\"Verify Alertpref\"] = pm.expect(pm.response.text()).to.include('AlertPreference');",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreferences.AlertPreference.id._\", pm.environment.get(\"Alertid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreferences.AlertPreference.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreferences.AlertPreference.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreferences.AlertPreference.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreferences.AlertPreference.name\", \"Payment Due\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreferences.AlertPreference.description\", \"Notification - Your {payee nickname} e-bill payment is due\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreferences.AlertPreference.status\", \"ON\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.AlertPreferences.AlertPreference.category\", \"EBILL\");",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{AlertFIID}}\",intuit-urid=\"{{AlertuserGUID}}\" intuit-fiscid=\"{{Alertprovider}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<AlertPreferenceQuery xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n<alertPreferenceIdList><Id>{{Alertid}}</Id></alertPreferenceIdList>\n</AlertPreferenceQuery>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/alertpreference",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"alertpreference"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
