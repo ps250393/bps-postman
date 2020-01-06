@@ -1,0 +1,560 @@
+{
+	"info": {
+		"_postman_id": "a50c088d-4b8a-46e0-b361-17871c47aa7f",
+		"name": "BPS-Cosubscriber",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add cosubscriber",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"let convertedData = xml2Json(pm.response.text());",
+							"var coapplicantid = convertedData.Success.Profile.coApplicants.CoApplicant.id._;",
+							"pm.environment.set(\"coapplicantid\", ((coapplicantid)));",
+							"",
+							"tests[\"Got Profile successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify Profile\"] = pm.expect(pm.response.text()).to.include('Profile');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.billingClass\", \"505\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.status\", \"ACTIVE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.id._\", pm.environment.get(\"Profileid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.createdTime\", \"2019-12-19T11:58:27.163-08:00\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.firstName\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.lastName\", \"Pritchard\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.ssn\", \"*********\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.birthdate\", \"1990-01-12\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.address1\", \"18 Pine St\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.city\", \"Princeton\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.state\", \"NJ\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.postalCode\", \"12318\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.emailAddress.Address\", \"anderson_martin@ncr.com\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.homePhoneNumber.number\", \"6509447897\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.dailyLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.transactionLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.workPhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.mobilePhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.id._\", ((coapplicantid)));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.firstName\", \"Sometest\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.lastName\" , \"Member\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.ssn\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.securityQuestion\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.securityAnswer\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.homePhoneNumber.number\" ,\"8002254217\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.workPhoneNumber.number\" ,\"8002254217\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.emailAddress.Address\" ,\"someone.somewhre@ncr.org\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.birthdate\" ,\"1987-12-12\");",
+							"",
+							"",
+							"",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "8f94f279-6054-48c3-a8d6-07f09304ed99",
+						"exec": [
+							"var SSNnumber = Math.floor(100000000 + Math.random() * 900000000);",
+							"pm.environment.set(\"SSNnumber\", SSNnumber);",
+							"console.log(SSNnumber)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Profile xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <id idDomain=\"IPE\">{{Profileid}}</id>\n        <revision>{{ProfileRevisionnum}}</revision>\n        <metaData>\n            <createdTime>2019-12-19T11:58:27.163-08:00</createdTime>\n            <lastUpdatedTime>2019-12-27T18:18:59.553-08:00</lastUpdatedTime>\n        </metaData>\n        <firstName>US</firstName>\n        <lastName>Pritchard</lastName>\n        <ssn>*********</ssn>\n        <billingClass>505</billingClass>\n        <birthdate>1990-01-12</birthdate>\n        <address>\n            <address1>18 Pine St</address1>\n            <city>Princeton</city>\n            <state>NJ</state>\n            <country>US</country>\n            <postalCode>12318</postalCode>\n        </address>\n        <emailAddress>\n            <Address>anderson_martin@ncr.com</Address>\n        </emailAddress>\n        <homePhoneNumber>\n            <number>6509447897</number>\n        </homePhoneNumber>\n        <workPhoneNumber/>\n        <mobilePhoneNumber/>\n        <dailyLimit>\n            <amount>9999.99</amount>\n        </dailyLimit>\n        <transactionLimit>\n            <amount>9999.99</amount>\n        </transactionLimit>\n        <status>ACTIVE</status>\n <coApplicants>\n      <CoApplicant>\n         <firstName>Sometest</firstName>\n         <lastName>Member</lastName>\n         <ssn>{{SSNnumber}}</ssn>\n         <securityQuestion>What is your mother's maiden name?</securityQuestion>\n         <securityAnswer>MOTHER</securityAnswer>\n         <birthdate>1987-12-12</birthdate>\n         <emailAddress>\n            <Address>someone.somewhre@ncr.org</Address>\n         </emailAddress>\n         <homePhoneNumber>\n            <number>8002254217</number>\n         </homePhoneNumber>\n         <workPhoneNumber />\n      </CoApplicant>\n   </coApplicants>\n    </Profile>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/profile",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Cosubscriber list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"var Profileid = convertedData.Success.Profile.id._;",
+							"var Revisionnum = convertedData.Success.Profile.revision;",
+							"pm.environment.set(\"ProfileRevisionnum\", (Revisionnum));",
+							"pm.environment.set(\"Profileid\", (Profileid));",
+							"console.log(Profileid)",
+							"console.log(Revisionnum)",
+							"// Assigning the extracted value in to a global variable",
+							"",
+							"tests[\"Got Profile successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify Profile\"] = pm.expect(pm.response.text()).to.include('Profile');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.billingClass\", \"505\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.status\", \"ACTIVE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.id._\", (Profileid));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.revision\", (Revisionnum));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.createdTime\", \"2019-12-19T11:58:27.163-08:00\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.firstName\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.lastName\", \"Pritchard\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.ssn\", \"*********\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.birthdate\", \"1990-01-12\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.address1\", \"18 Pine St\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.city\", \"Princeton\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.state\", \"NJ\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.postalCode\", \"12318\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.emailAddress.Address\", \"anderson_martin@ncr.com\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.homePhoneNumber.number\", \"6509447897\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.dailyLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.transactionLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.workPhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.mobilePhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.id._\", pm.environment.get(\"coapplicantid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.firstName\", \"Sometest\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.lastName\" , \"Member\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.ssn\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.securityQuestion\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.securityAnswer\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.homePhoneNumber.number\" ,\"8002254217\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.workPhoneNumber.number\" ,\"8002254217\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.emailAddress.Address\" ,\"someone.somewhre@ncr.org\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.birthdate\" ,\"1987-12-12\");",
+							"",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/profile",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Cosubscriber",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"let convertedData = xml2Json(pm.response.text());",
+							"var coapplicantid = convertedData.Success.Profile.coApplicants.CoApplicant.id._;",
+							"pm.environment.set(\"coapplicantid\", ((coapplicantid)));",
+							"",
+							"tests[\"Got Profile successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify Profile\"] = pm.expect(pm.response.text()).to.include('Profile');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.billingClass\", \"505\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.status\", \"ACTIVE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.id._\", pm.environment.get(\"Profileid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.createdTime\", \"2019-12-19T11:58:27.163-08:00\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.firstName\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.lastName\", \"Pritchard\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.ssn\", \"*********\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.birthdate\", \"1990-01-12\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.address1\", \"18 Pine St\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.city\", \"Princeton\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.state\", \"NJ\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.postalCode\", \"12318\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.emailAddress.Address\", \"anderson_martin@ncr.com\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.homePhoneNumber.number\", \"6509447897\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.dailyLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.transactionLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.workPhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.mobilePhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.id._\", pm.environment.get(\"coapplicantid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.firstName\", \"Sometest1234\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.lastName\" , \"Member1234\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.ssn\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.securityQuestion\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.securityAnswer\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.homePhoneNumber.number\" ,\"8002254617\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.workPhoneNumber.number\" ,\"8002254617\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.emailAddress.Address\" ,\"someone.somewhre@ncr.org\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.coApplicants.CoApplicant.birthdate\" ,\"1987-12-12\");",
+							"",
+							"",
+							"",
+							"",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Profile xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <id idDomain=\"IPE\">{{Profileid}}</id>\n        <revision>{{ProfileRevisionnum}}</revision>\n        <metaData>\n            <createdTime>2019-12-19T11:58:27.163-08:00</createdTime>\n            <lastUpdatedTime>2019-12-27T18:18:59.553-08:00</lastUpdatedTime>\n        </metaData>\n        <firstName>US</firstName>\n        <lastName>Pritchard</lastName>\n        <ssn>*********</ssn>\n        <billingClass>505</billingClass>\n        <birthdate>1990-01-12</birthdate>\n        <address>\n            <address1>18 Pine St</address1>\n            <city>Princeton</city>\n            <state>NJ</state>\n            <country>US</country>\n            <postalCode>12318</postalCode>\n        </address>\n        <emailAddress>\n            <Address>anderson_martin@ncr.com</Address>\n        </emailAddress>\n        <homePhoneNumber>\n            <number>6509447897</number>\n        </homePhoneNumber>\n        <workPhoneNumber/>\n        <mobilePhoneNumber/>\n        <dailyLimit>\n            <amount>9999.99</amount>\n        </dailyLimit>\n        <transactionLimit>\n            <amount>9999.99</amount>\n        </transactionLimit>\n        <status>ACTIVE</status>\n       <coApplicants>\n            <CoApplicant>\n                <id idDomain=\"IPE\">{{coapplicantid}}</id>\n                <revision>1</revision>\n                <metaData>\n                    <createdTime>2020-01-05T20:23:58.268-08:00</createdTime>\n                    <lastUpdatedTime>2020-01-05T20:23:58.268-08:00</lastUpdatedTime>\n                </metaData>\n                <firstName>Sometest1234</firstName>\n                <lastName>Member1234</lastName>\n                <ssn>*********</ssn>\n                <securityQuestion>What is your mother's maiden name?</securityQuestion>\n                <securityAnswer>MOTHER</securityAnswer>\n                <homePhoneNumber>\n                    <number>8002254617</number>\n                </homePhoneNumber>\n                <workPhoneNumber>\n                    <number>8002254617</number>\n                </workPhoneNumber>\n                <emailAddress>\n                    <Address>someone.somewhre@ncr.org</Address>\n                </emailAddress>\n                <birthdate>1987-12-12</birthdate>\n            </CoApplicant>\n        </coApplicants>\n    </Profile>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/profile",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Cosubscriber",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"tests[\"Got Profile successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify Profile\"] = pm.expect(pm.response.text()).to.include('Profile');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.billingClass\", \"505\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.status\", \"ACTIVE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.id._\", pm.environment.get(\"Profileid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.createdTime\", \"2019-12-19T11:58:27.163-08:00\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.firstName\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.lastName\", \"Pritchard\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.ssn\", \"*********\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.birthdate\", \"1990-01-12\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.address1\", \"18 Pine St\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.city\", \"Princeton\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.state\", \"NJ\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.postalCode\", \"12318\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.emailAddress.Address\", \"anderson_martin@ncr.com\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.homePhoneNumber.number\", \"6509447897\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.dailyLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.transactionLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.workPhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.mobilePhoneNumber\");",
+							"",
+							"",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Profile xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n        <id idDomain=\"IPE\">{{Profileid}}</id>\n        <revision>{{ProfileRevisionnum}}</revision>\n        <metaData>\n            <createdTime>2019-12-19T11:58:27.163-08:00</createdTime>\n            <lastUpdatedTime>2020-01-04T19:44:35.041-08:00</lastUpdatedTime>\n        </metaData>\n        <firstName>US</firstName>\n        <lastName>Pritchard</lastName>\n        <ssn>*********</ssn>\n        <billingClass>505</billingClass>\n        <birthdate>1990-01-12</birthdate>\n        <address>\n            <address1>18 Pine St</address1>\n            <city>Princeton</city>\n            <state>NJ</state>\n            <country>US</country>\n            <postalCode>12318</postalCode>\n        </address>\n        <emailAddress>\n            <Address>anderson_martin@ncr.com</Address>\n        </emailAddress>\n        <homePhoneNumber>\n            <number>6509447897</number>\n        </homePhoneNumber>\n        <workPhoneNumber/>\n        <mobilePhoneNumber/>\n        <dailyLimit>\n            <amount>9999.99</amount>\n        </dailyLimit>\n        <transactionLimit>\n            <amount>9999.99</amount>\n        </transactionLimit>\n        <status>ACTIVE</status>\n    </Profile>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/profile",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
