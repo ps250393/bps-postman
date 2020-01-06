@@ -1,0 +1,109 @@
+{
+	"info": {
+		"_postman_id": "7e801454-cae0-441b-842e-f246afc4cccb",
+		"name": "BPS-BillImage",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get the Image URL",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Got Bill successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.ImageUrl\");",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{BILLSGUID}}\" intuit-fiscid=\"{{BILLSLOGIN}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					},
+					{
+						"key": "intuit_tid",
+						"type": "text",
+						"value": "tcmspringboottesting1"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/billimageurl/{{billid}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"billimageurl",
+						"{{billid}}"
+					]
+				},
+				"description": "This test is to fetch the image URL"
+			},
+			"response": []
+		}
+	]
+}
