@@ -1,0 +1,224 @@
+{
+	"info": {
+		"_postman_id": "71a41e35-4ea5-4f54-83ed-b55f4a8910f9",
+		"name": "BPS-BillEnroll",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Payee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate Headers",
+							"expectResponseToHaveHeader(\"Content-Type\", \"application/xml\");",
+							"expectResponseToHaveHeader(\"Date\");",
+							"expectResponseToHaveHeader(\"intuit_tid\", pm.environment.get(\"intuit_tid\"));",
+							"",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.Payees.Payee.length] = true;",
+							"tests[\"Got Payee successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"var BillEnrollPayee = convertedData.Success.Payees.Payee[2].id._;",
+							"console.log(BillEnrollPayee)",
+							"pm.environment.set(\"BillEnrollPayee\", BillEnrollPayee);",
+							"",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{BILLSGUID}}\" intuit-fiscid=\"{{BILLSLOGIN}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					},
+					{
+						"key": "intuit_tid",
+						"value": "{{intuit_tid}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/payee",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"payee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bill Enrollment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate Headers",
+							"expectResponseToHaveHeader(\"Content-Type\", \"application/xml\");",
+							"expectResponseToHaveHeader(\"Date\");",
+							"expectResponseToHaveHeader(\"intuit_tid\", pm.environment.get(\"intuit_tid\"));",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.BillEnrollment.tokens.token.length] = true;",
+							"expectResponseBodyToHaveJsonProperty(\"Success.BillEnrollment.payeeId._\", pm.environment.get(\"BillEnrollPayee\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.BillEnrollment.status\", \"INCOMPLETE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.BillEnrollment.tokens\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.BillEnrollment.tokens.token\");",
+							"",
+							"",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{BILLSGUID}}\" intuit-fiscid=\"{{BILLSLOGIN}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					},
+					{
+						"key": "intuit_tid",
+						"value": "{{intuit_tid}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<BillEnrollment xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n    <payeeId idDomain=\"IPE\">{{BillEnrollPayee}}</payeeId>\n</BillEnrollment>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/billenrollment",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"billenrollment"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
