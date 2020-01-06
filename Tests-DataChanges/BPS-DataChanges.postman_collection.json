@@ -28,7 +28,8 @@
 							"tests[\"Got datachanges successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
 							"tests[\"Verify DataChange\"] = pm.expect(pm.response.text()).to.include('DataChanges');",
 							"tests[\"Verify Date\"] = pm.expect(pm.response.text()).to.include('entityModified');",
-							"",
+							"tests[\"Verify entityName\"] = pm.expect(pm.response.text()).to.include('entityName');",
+							"tests[\"Verify entityFresh\"] = pm.expect(pm.response.text()).to.include('entityFresh');",
 							"",
 							"//End testing using pxlib",
 							"endPXTest();",
@@ -99,8 +100,106 @@
 						"0",
 						"datachange"
 					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DataChanges Query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Got datachanges successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify DataChange\"] = pm.expect(pm.response.text()).to.include('DataChanges');",
+							"tests[\"Verify Date\"] = pm.expect(pm.response.text()).to.include('entityModified');",
+							"tests[\"Verify entityName\"] = pm.expect(pm.response.text()).to.include('entityName');",
+							"tests[\"Verify entityFresh\"] = pm.expect(pm.response.text()).to.include('entityFresh');",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					},
+					{
+						"key": "intuit_tid",
+						"value": "tcmspringboottesting1",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<DataChangeQuery xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n<entityName>Account</entityName>\n</DataChangeQuery>"
 				},
-				"description": "This test is to get Payee details from BPS"
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/datachange",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"datachange"
+					]
+				}
 			},
 			"response": []
 		}
