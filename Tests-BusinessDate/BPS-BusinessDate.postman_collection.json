@@ -1,0 +1,418 @@
+{
+	"info": {
+		"_postman_id": "771cb30d-6da1-4763-93b1-4a7f14d18f33",
+		"name": "BPS-BusinessDate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add UnManaged Payee -- FISERV Copy",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "93f6dca4-20fd-43e7-85c0-049241a88862",
+						"exec": [
+							"pm.environment.set(\"UnManagedPayee\", \"TestPayee\");",
+							"pm.environment.set(\"Accountnum\", \"12345678910\");",
+							"pm.environment.set(\"phonenum\", \"8689558833\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "483ac3b9-5bca-4bbf-b5ab-8d1a687a19c9",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"let convertedData = xml2Json(pm.response.text());",
+							"var unmanagedPayeeid = convertedData.Success.Payee.id._;",
+							"console.log(unmanagedPayeeid)",
+							"",
+							"// Assigning the extracted value in to a global variable",
+							"pm.environment.set(\"UnmanagedPayeeid\", unmanagedPayeeid);",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.name\", \"TestPayee\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.status\", \"ACTIVE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.payeeType\", \"UNMANAGED\");",
+							"tests[\"Got Payees successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"tests[\"Verify Payee\"] = pm.expect(pm.response.text()).to.include('Payee');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.id._\", ((unmanagedPayeeid)));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.revision\", \"1\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.nickname\",  pm.environment.get(\"UnManagedPayee\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.accountNumber\", \"****8910\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.address1\", \"20 Payee road\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.city\", \"Norcroos\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.state\", \"GA\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.postalCode\", \"30091\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.phoneNumber.number\", \"8689558833\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.emailAddress\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.categoryId._\", \"103717\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.categoryName\", \"Uncategorized\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.merchantId\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.cutoffTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.leadDays\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.eBillStatus\", \"NOT_AVAILABLE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.lastPaidAmount\");",
+							"",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"}); ",
+							"",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<Payee xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n<name>{{UnManagedPayee}}</name>\n<nickname>{{UnManagedPayee}}</nickname>\n<accountNumber>{{Accountnum}}</accountNumber>\n<address>\n<address1>20 Payee road</address1>\n<city>Norcroos</city>\n<state>GA</state>\n<country>US</country>\n<postalCode>30091</postalCode>\n</address>\n<phoneNumber>\n<number>{{phonenum}}</number>\n</phoneNumber>\n<emailAddress/>\n<categoryId idDomain=\"IPE\">103717</categoryId>\n<categoryName>uncategorized</categoryName>\n<merchantId idDomain=\"IPE\"/>\n<status>ACTIVE</status>\n<cutoffTime>15:00:00.000-07:00</cutoffTime>\n<leadDays>4</leadDays>\n<payeeType>UNMANAGED</payeeType>\n</Payee>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/payee",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"payee"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get the business Date",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.BusinessDates.BusinessDate.length] = true;",
+							"var PaymentDate = convertedData.Success.BusinessDates.BusinessDate[0].paymentDate;",
+							"console.log(PaymentDate)",
+							"",
+							"expectResponseBodyToHaveJsonUnorderedArray(\"Success.BusinessDates.BusinessDate\", [",
+							"        {pathToProperty: \"paymentDate\", expectedValue: ((PaymentDate))},",
+							"        {pathToProperty: \"expectedDeliveryDate\",expectedValue: ((PaymentDate))}",
+							"        ]);",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"pm.environment.set(\"PaymentDate\", PaymentDate);",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "5c505ae9-1ed0-4658-8328-b9091a5b240a",
+						"exec": [
+							"var today = new Date();",
+							"var date = today.getDate();",
+							"var month = today.getMonth(); ",
+							"var year = today.getFullYear();",
+							"",
+							"if(month === 0)",
+							"{",
+							"    month = month + 1;",
+							"}",
+							"",
+							"var nextmonth = month+1;",
+							"console.log(nextmonth)",
+							"",
+							"if(month < 10)",
+							"{",
+							"    month='0'+month;",
+							"}",
+							"if(nextmonth < 10)",
+							"{",
+							"    nextmonth='0'+nextmonth;",
+							"}",
+							"",
+							"if(date < 10)",
+							"{",
+							"    date='0'+date;",
+							"}",
+							"",
+							"today = year+'-'+month+'-'+date;",
+							"var monthDate = year+'-'+nextmonth+'-'+date;",
+							"console.log(today);",
+							"console.log(monthDate);",
+							"",
+							"pm.environment.set(\"today\", (today));",
+							"pm.environment.set(\"monthDate\", (monthDate));",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					},
+					{
+						"key": "bbs_realm_id",
+						"value": "{{realmid}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<BusinessDateQuery xmlns=\"http://www.intuit.com/payment/cdm/v1\">\n<dateRange>\n<startDate>2020-01-05</startDate>\n<endDate>2020-02-05</endDate>\n</dateRange>\n<payeeId idDomain=\"IPE\">{{UnmanagedPayeeid}}</payeeId>\n</BusinessDateQuery>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/businessdate",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"businessdate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete- Unmanaged Payee",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"tests[\"Count: \"  + convertedData.Success.Payee.length] = true;",
+							"tests[\"Payee Deleted successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.name\", pm.environment.get(\"UnManagedPayee\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.status\", \"DELETED\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.id._\", pm.environment.get(\"UnmanagedPayeeid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.revision\", \"2\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.metaData.createdTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.nickname\", pm.environment.get(\"UnManagedPayee\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.accountNumber\", \"****8910\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.address1\", \"20 Payee road\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.city\", \"Norcroos\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.state\", \"GA\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.address.postalCode\", \"30091\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.phoneNumber.number\", \"8689558833\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.emailAddress\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.categoryId._\", \"103717\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.categoryName\", \"Uncategorized\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.merchantId\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.cutoffTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.leadDays\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.payeeType\", \"UNMANAGED\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.eBillStatus\", \"NOT_AVAILABLE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Payee.lastPaidAmount\");",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/payee/{{UnmanagedPayeeid}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"payee",
+						"{{UnmanagedPayeeid}}"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
