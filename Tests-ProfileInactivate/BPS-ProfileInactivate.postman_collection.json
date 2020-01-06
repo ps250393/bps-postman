@@ -1,0 +1,384 @@
+{
+	"info": {
+		"_postman_id": "1bdd5c3e-37c5-4506-b4d9-6294db61e92b",
+		"name": "BPS-ProfileInactivate",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get profile for Deletion",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"var ProfileidInactivate = convertedData.Success.Profile.id._;",
+							"pm.environment.set(\"ProfileidInactivate\", (ProfileidInactivate));",
+							"console.log(ProfileidInactivate)",
+							"",
+							"// Assigning the extracted value in to a global variable",
+							"",
+							"tests[\"Got Profile successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify Profile\"] = pm.expect(pm.response.text()).to.include('Profile');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.billingClass\", \"505\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.status\", \"ACTIVE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.id._\", (Profileid));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.createdTime\", \"2019-12-19T11:58:27.163-08:00\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.firstName\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.lastName\", \"Pritchard\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.ssn\", \"*********\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.birthdate\", \"1990-01-12\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.address1\", \"18 Pine St\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.city\", \"Princeton\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.state\", \"NJ\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.postalCode\", \"12318\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.emailAddress.Address\", \"anderson_martin@ncr.com\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.homePhoneNumber.number\", \"6509447897\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.dailyLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.transactionLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.workPhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.mobilePhoneNumber\");",
+							"",
+							"",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{ProfileInactivateGUID}}\" intuit-fiscid=\"{{ProfileInactivate}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text"
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/profile",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, false);",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"tests[\"Got Profile successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"",
+							"",
+							"",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/xml",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "INTUITAUTH intuit-app-token=\"\",intuit-fiid=\"DI0018\",intuit-urid=\"61b640a0d9b546fbb3ae25130451efdd\" intuit-fiscid=\"{{ProfileInactivate}}\"",
+						"type": "text"
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"value": "PRIMARY",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "intuit_loginId",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": "identity;q=1, *;q=0",
+						"type": "text"
+					},
+					{
+						"key": "bbs_realm_id",
+						"value": "1038046",
+						"type": "text"
+					},
+					{
+						"key": "intuit_offeringid",
+						"value": "BPUI",
+						"type": "text"
+					},
+					{
+						"key": "intuit-subscriber-id",
+						"value": "868794003",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/profile/{{ProfileidInactivate}}",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"profile",
+						"{{ProfileidInactivate}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reactivate Profile",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "3d5670c9-7aaa-489b-88b0-3ca40f27579c",
+						"exec": [
+							"//Load pxlib",
+							"var pxlib = eval(pm.globals.get(\"pxlib\"));",
+							"",
+							"//Start testing using pxlib",
+							"startPXTest(pm, pm.globals.get(\"useStrictValidation\"));",
+							"",
+							"//Validate response status code",
+							"expectResponseStatusCodeToBe(200);",
+							"",
+							"//Validate response body",
+							"",
+							"let convertedData = xml2Json(pm.response.text());",
+							"var Revisionnum = convertedData.Success.Profile.revision;",
+							"pm.environment.set(\"ProfileRevisionnum\", (Revisionnum));",
+							"console.log(Revisionnum)",
+							"",
+							"// Assigning the extracted value in to a global variable",
+							"",
+							"tests[\"Got Profile successfully\"] = pm.expect(pm.response.text()).to.include('Success');",
+							"tests[\"Verify Profile\"] = pm.expect(pm.response.text()).to.include('Profile');",
+							"tests[\"Verify id\"] = pm.expect(pm.response.text()).to.include('id');",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.billingClass\", \"505\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.status\", \"ACTIVE\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.id._\", pm.environment.get(\"Profileid\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.revision\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.createdTime\", \"2019-12-19T11:58:27.163-08:00\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.metaData.lastUpdatedTime\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.firstName\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.lastName\", \"Pritchard\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.ssn\", \"*********\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.birthdate\", \"1990-01-12\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.address1\", \"18 Pine St\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.city\", \"Princeton\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.state\", \"NJ\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.country\", \"US\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.address.postalCode\", \"12318\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.emailAddress.Address\", pm.environment.get(\"ProfileUpdate\"));",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.homePhoneNumber.number\", \"6509447897\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.dailyLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.transactionLimit.amount\", \"9999.99\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.workPhoneNumber\");",
+							"expectResponseBodyToHaveJsonProperty(\"Success.Profile.mobilePhoneNumber\");",
+							"",
+							"",
+							"tests[\"verify metadata\"] = pm.expect(pm.response.text()).to.include('metaData');",
+							"",
+							"",
+							"//pm.test(\"Check Payee Name\", function () {",
+							"//    pm.expect(convertedData.Success.Payees.Payee.name).to.equal(\"ManagePayee\");",
+							"//    pm.expect(convertedData.Success.Payees.Payee.status).to.equal(\"ACTIVE\");",
+							"//});",
+							"",
+							"//End testing using pxlib",
+							"endPXTest();",
+							"",
+							"var contentTypeHeaderExists = responseHeaders.hasOwnProperty(\"Content-Type\");",
+							"tests[\"Has Content-Type\"] = contentTypeHeaderExists;",
+							"",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/xml"
+					},
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "INTUITAUTH intuit-fiid=\"{{FIID}}\",intuit-urid=\"{{GUID}}\" intuit-fiscid=\"{{loginid}}\""
+					},
+					{
+						"key": "intuit_payment_app_token",
+						"type": "text",
+						"value": "3696638E-45FE-4B13-97AB-73026AA91F98",
+						"disabled": true
+					},
+					{
+						"key": "intuit_payment_userType",
+						"type": "text",
+						"value": "PRIMARY"
+					},
+					{
+						"key": "intuit_loginId",
+						"type": "text",
+						"value": ""
+					},
+					{
+						"key": "Accept-Encoding",
+						"type": "text",
+						"value": "identity;q=1, *;q=0"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "    <fiCustomer>\n        <ns9:id type=\"GUID\">61b640a0d9b546fbb3ae25130451efdd</ns9:id>\n        <ns9:fiId>DI0018</ns9:fiId>\n        <ns9:memberNumber>868794003</ns9:memberNumber>\n        <ns9:hostCredential>\n            <ns2:loginId>868794003</ns2:loginId>\n        </ns9:hostCredential>\n        <ns9:person>\n            <ns2:personName>\n                <ns2:lastName>Pritchard</ns2:lastName>\n                <ns2:firstName>US</ns2:firstName>\n                <ns2:fullName>US Pritchard</ns2:fullName>\n            </ns2:personName>\n            <ns2:contactInfo>\n                <ns2:phoneNumber>\n                    <ns2:type>HOME</ns2:type>\n                    <ns2:number>6509447897</ns2:number>\n                </ns2:phoneNumber>\n                <ns2:emailAddress>anderson_martin@ncr.com</ns2:emailAddress>\n                <ns2:postalAddress>\n                    <ns2:index>1</ns2:index>\n                    <ns2:address1>18 PINE ST</ns2:address1>\n                    <ns2:address2/>\n                    <ns2:address3/>\n                    <ns2:city>PRINCETON</ns2:city>\n                    <ns2:state>NJ</ns2:state>\n                    <ns2:postalCode>12318</ns2:postalCode>\n                </ns2:postalAddress>\n            </ns2:contactInfo>\n            <ns2:birthDate>1990-01-12</ns2:birthDate>\n        </ns9:person>\n        <ns9:channelInfos>\n            <ns9:channelInfo>\n                <ns9:channelType>WEB</ns9:channelType>\n                <ns9:userStatus>\n                    <ns9:active>false</ns9:active>\n                    <ns9:newUser>true</ns9:newUser>\n                    <ns9:onHold>false</ns9:onHold>\n                    <ns9:locked>false</ns9:locked>\n                    <ns9:reset>false</ns9:reset>\n                </ns9:userStatus>\n            </ns9:channelInfo>\n        </ns9:channelInfos>\n        <ns9:destinations>\n            <ns4:destination>\n                <ns4:contactInfo>6509447897</ns4:contactInfo>\n                <ns4:protocol>SMS</ns4:protocol>\n            </ns4:destination>\n        </ns9:destinations>\n        <ns9:taxIdType>SSN</ns9:taxIdType>\n        <ns9:acceptedDisclosure>false</ns9:acceptedDisclosure>\n        <ns9:userType>PRIMARY</ns9:userType>\n        <ns9:ssn>*********</ns9:ssn>\n        <ns9:billPayChecked>true</ns9:billPayChecked>\n        <ns9:disclosures>\n            <ns9:totalCount>1</ns9:totalCount>\n            <ns9:disclosure>\n                <ns9:type>BILLPAY</ns9:type>\n                <ns9:status>Y</ns9:status>\n            </ns9:disclosure>\n        </ns9:disclosures>\n    </fiCustomer>\n    <productName>BILLPAY</productName>\n    <status>PENDING</status>\n    <partnerId>868794003</partnerId>\n    <processDate>2020-01-06-08:00</processDate>\n    <accounts>\n        <ns6:id>tm-t0j4m8Kz838MKZTShBXrmwuoTAKGcFWd0zRfJz0g</ns6:id>\n        <ns6:fiId>DI0018</ns6:fiId>\n        <ns6:description>OS test 1</ns6:description>\n        <ns6:nickName>OS test 1</ns6:nickName>\n        <ns6:displayAccountNumber>*XXXX</ns6:displayAccountNumber>\n        <ns6:accountNumber>\n            <ns6:hostValue>107008823</ns6:hostValue>\n            <ns6:displayValue>XXXXXXXXX</ns6:displayValue>\n            <ns6:billPayValue>****XXXX</ns6:billPayValue>\n            <ns6:pfmValue>XXXXXXXXX</ns6:pfmValue>\n            <ns6:rawHostValue>XXXXXXXXX^XX_XXX^X</ns6:rawHostValue>\n        </ns6:accountNumber>\n        <ns6:category>DEPOSIT</ns6:category>\n        <ns6:accountType>CHECKING</ns6:accountType>\n        <ns6:primaryHolderName>OS test 1</ns6:primaryHolderName>\n        <ns6:ownershipType>PRIMARY</ns6:ownershipType>\n        <ns6:balance>\n            <ns6:currentBalance>\n                <ns2:amount>5371.17</ns2:amount>\n            </ns6:currentBalance>\n            <ns6:availableBalance>\n                <ns2:amount>7024.49</ns2:amount>\n            </ns6:availableBalance>\n        </ns6:balance>\n        <ns6:accountStatus>VERIFIED</ns6:accountStatus>\n        <ns6:displayFlag>\n            <ns6:summary>true</ns6:summary>\n            <ns6:transferFrom>true</ns6:transferFrom>\n            <ns6:transferTo>true</ns6:transferTo>\n            <ns6:isHistoryEnabled>true</ns6:isHistoryEnabled>\n            <ns6:isHistoryEntitled>true</ns6:isHistoryEntitled>\n        </ns6:displayFlag>\n        <ns6:routingNumber>XXXXXXXXX</ns6:routingNumber>\n        <ns6:accountHidden>false</ns6:accountHidden>\n        <ns6:fiName>IQA site3</ns6:fiName>\n    </accounts>\n    <partnerDetail>\n        <ns2:map>\n            <ns2:entry>\n                <ns2:key>XXX</ns2:key>\n                <ns2:value>XXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXX_XXXXXX</ns2:key>\n                <ns2:value>XXX_XXXXXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXXXXX_XXXX</ns2:key>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXX</ns2:key>\n                <ns2:value>XX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX_XXXX</ns2:key>\n                <ns2:value>XXXXXXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXX</ns2:key>\n                <ns2:value>XXXXXXXX_XXXXXX@XXX.XXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXX_XXXX</ns2:key>\n                <ns2:value>XX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXXXX_XXXX</ns2:key>\n                <ns2:value>XXXXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX_XXX_XXXXXXXXXX_XX</ns2:key>\n                <ns2:value>XXXXXXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX</ns2:key>\n                <ns2:value>XXXXXXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXXXX</ns2:key>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX_XXX_XXXXXXX_XX</ns2:key>\n                <ns2:value>XXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX_XXX_XXXX_XX</ns2:key>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXX_XXXXXXX</ns2:key>\n                <ns2:value>XXXXXXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX_XXX_XXXXXXX_XXXXX</ns2:key>\n                <ns2:value>XXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX_XXXXX</ns2:key>\n                <ns2:value>XXXXXXXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX_XXX_XXXXXXXX</ns2:key>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXXXX_XX</ns2:key>\n                <ns2:value>XXXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXXXXX</ns2:key>\n                <ns2:value>XX XXXX XX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXXXX_XX</ns2:key>\n                <ns2:value>XX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>XXXX_XX_XXXXX</ns2:key>\n                <ns2:value>XX/XX/XXXX</ns2:value>\n            </ns2:entry>\n            <ns2:entry>\n                <ns2:key>MOTHER_MAIDEN</ns2:key>\n                <ns2:value>MOTHER</ns2:value>\n            </ns2:entry>\n        </ns2:map>\n    </partnerDetail>\n</ns13:PartnerRegistration>"
+				},
+				"url": {
+					"raw": "{{bps-baseurl}}/payment/v1/realm/0/registration",
+					"host": [
+						"{{bps-baseurl}}"
+					],
+					"path": [
+						"payment",
+						"v1",
+						"realm",
+						"0",
+						"registration"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
